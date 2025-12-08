@@ -1,47 +1,124 @@
 // ======================================
-// Calculadora em C
+// Calculadora  C - Bases de programação.
 // ======================================
 
-// Algorítmo
-// 1. Cria uma lista de regiões e seus fretes
-// 2. Mostra os produtos disponíveis e pede pra escolher
-// 3. Mostra informações do produto escolhido e pede região de entrega
-// 4. Calcula o frete baseado na região e mostra o preço total (produto + frete) junto com a data e hora da compra e a data prevista de entrega
-// Deve apresentar no final: Código, nome, peso, preço, local, frete, preço compra, data e hora, data prevista de entrega. (um dia depois da data da compra)
+// 1. Coleta dados básicos
+// 2. Pede região de entrega para o usuário
+// 3. Calcula frete baseado na região
+// 4. Pede dia e hora da compra
+// 5. Apresenta no final: Código, nome, peso, preço, local, frete, preço compra, data e hora, data prevista de entrega. (um dia depois da data da compra)
 
 #include <stdio.h>
-#include <time.h>
+#include <stdlib.h>
 
-int main()
-{
-    char *_regioes[] = {"sul", "sudeste", "norte", "nordeste"};
+int main() {
 
-    char *_codigo_produtos[] = {"cod1", "cod2", "cod3", "cod4", "cod5"}; //obs: substituir pelos valores reais e trocar para int 
+    // Informações do produto
+    char codigo[6];
+    char produto[25];
 
-    char *_nome_produtos[] = {"produto1", "produto2", "produto3", "produto4", "produto5"}; // substituir pelos nomes reais, tirar o ponteiro e trocar o tipo pra string
+    int peso;
+    float preco;
+    int regiao;
 
-    char *_peso_produtos[] = {"peso1", "peso", "peso3", "peso4", "peso5"}; // quando for colocar o peso, troca o tipo pra int ou float e tira o ponteiro
+    // Valores a calcular
+    float fretePadrao;
+    float fretePeso;
+    float freteFinal;
 
-    char *_preco_produtos[] = {"preco1", "preco2", "preco3", "preco4", "preco5"}; // Trocar para int ou float
+    int dia;
+    int mes;
+    int ano;
+    float horaCompra;
+    int previsaoEntrega;
 
-    char _regiao_escolhida;
-    float _frete;
-    float _preco_compra;
-    char _data_hora_compra;
-    char _data_prevista_entrega; // calcular um dia depois da compra. Planejo usar o time.h pra isso
+    // Coleta dos dados do produto
+    printf("Informe o codigo do produto: ");
+    scanf("%s", codigo);
 
-// ---------------EXECUÇÃO---------------------------------------------------------------------------------------------------------------------------------------------------
+    printf("Informe o nome do produto: ");
+    scanf("%s", produto);
 
-    printf("\n", "\n"); // Espaço vazio pra dar duas linhas
-    printf("Para escolher um produto, digitar o numero à esquerda dele.\n");
-    printf("Produtos\n");
-    printf("\n");
+    printf("Informe o peso do produto (kg): ");
+    scanf("%d", &peso);
 
-    for (int i = 0; i <5; i++)
-    {
-        printf("%d. %s\n",i + 1, _nome_produtos[i]);
+    printf("Informe o preco do produto: ");
+    scanf("%f", &preco);
+
+    // Seleção da região
+    do {
+        printf("\nEscolha a regiao de entrega:\n");
+        printf("[1] Sul\n[2] Sudeste\n[3] Norte\n[4] Nordeste\n");
+        printf("Opcao: ");
+        scanf("%d", &regiao);
+
+        if (regiao < 1 || regiao > 4) {
+            printf("Opcao invalida! Digite um numero entre 1 e 4\n");
+        }
+
+    } while (regiao < 1 || regiao > 4);
+
+    // Valores de frete por região
+    switch (regiao) {
+        case 1:
+            fretePadrao = 30;
+            fretePeso   = 50;
+            break;
+        case 2:
+            fretePadrao = 25;
+            fretePeso   = 45;
+            break;
+        case 3:
+            fretePadrao = 35;
+            fretePeso   = 55;
+            break;
+        case 4:
+            fretePadrao = 40;
+            fretePeso   = 60;
+            break;
     }
 
-    getchar();
+    // Valores (Calculo do frete e total da compra)
+
+    printf("Valor padrao da regiao: R$ %.2f\n", fretePadrao);
+    printf("Valor para produtos acima de 2kg: R$ %.2f\n", fretePeso);
+
+    if (peso > 2) {
+        freteFinal = fretePeso;
+        printf("Valor aplicado: R$ %.2f (produto acima de 2kg)\n", freteFinal);
+    } else {
+        freteFinal = fretePadrao;
+        printf("Valor aplicado: R$ %.2f (frete padrao)\n", freteFinal);
+    }
+
+    float total = preco + freteFinal;
+    printf("\nValor total a pagar: R$ %.2f (Produto: R$ %.2f, Frete: R$ %.2f)\n", total, preco, freteFinal);
+    
+    // Data e hora da compra
+
+    printf("\nDigite o dia da compra (DD/MM/AA): ");
+    scanf("%d/%d/%d", &dia, &mes, &ano);
+
+    while (getchar() != '\n');
+    printf("Digite a hora da compra (ex: 14.20): ");
+    scanf("%f", &horaCompra);
+
+    previsaoEntrega = dia + 1;
+
+    // Display das informações pedidas no final
+    printf("\n===== RESUMO DO PEDIDO =====\n");
+    printf("Produto: %s\n", produto);
+    printf("Codigo: %s\n", codigo);
+    printf("Peso: %d kg\n", peso);
+    printf("Preco do produto: R$ %.2f\n", preco);
+    printf("Regiao selecionada: %d\n", regiao);
+    printf("Frete: R$ %.2f\n", freteFinal);
+    printf("Valor total da compra: R$ %.2f\n", total);
+    printf("Data da compra: %02d/%02d/%02d\n", dia, mes, ano);
+    printf("Hora da compra: %.2f\n", horaCompra);
+    printf("Entrega prevista para o dia: %d\n", previsaoEntrega);
+    printf("============================\n");
+
+    system("pause"); 
     return 0;
 }
